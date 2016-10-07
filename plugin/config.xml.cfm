@@ -1,12 +1,11 @@
-<cfinclude template="../includes/fw1config.cfm" />
 <cfoutput>
 	<plugin>
 
 		<!-- Name : the name of the plugin -->
-		<name>#variables.framework.package#</name>
+		<name>mura500</name>
 
 		<!-- Package : a unique, variable-safe name for the plugin -->
-		<package>#variables.framework.package#</package>
+		<package>mura500/package>
 
 		<!--
 			DirectoryFormat : 
@@ -17,7 +16,7 @@
 		<directoryFormat>packageOnly</directoryFormat>
 
 		<!-- Version : Meta information. May contain any value you wish. -->
-		<version>#variables.framework.packageVersion#</version>
+		<version>0.1</version>
 
 		<!--
 			LoadPriority : 
@@ -43,7 +42,7 @@
 		<providerURL>https://nordpil.com</providerURL>
 
 		<!-- Category : Usually either 'Application' or 'Utility' -->
-		<category>Application</category>
+		<category>Utility</category>
 
 		<!--
 			ORMCFCLocation : 
@@ -121,98 +120,6 @@
 			for CFC-based objects determine whether they are cached or instantiated
 			on a per-request basis.
 		-->
-		<displayobjects location="global">
-			<displayobject
-				name="TagCloud"
-				component="includes.displayObjects"
-				displaymethod="dspTagCloud"
-				persist="0"
-			/>
-			<displayobject
-				name="ShortcutPanel"
-				component="includes.displayObjects"
-				displaymethod="dspShortcutPanel"
-				persist="0"
-			/>
-			<displayobject
-				name="PageOperations"
-				component="includes.displayObjects"
-				displaymethod="dspPageOperations"
-				persist="0"
-			/>
-			<displayobject
-				name="Attachments"
-				component="includes.displayObjects"
-				displaymethod="dspAttachments"
-				persist="0"
-			/>
-			<displayobject
-				name="BackLinks"
-				component="includes.displayObjects"
-				displaymethod="dspBacklinksPanel"
-				persist="0"
-			/>
-			<displayobject
-				name="RecentlyVisited"
-				component="includes.displayObjects"
-				displaymethod="dspRecents"
-				persist="0"
-			/>
-			<displayobject
-				name="LatestUpdates"
-				component="includes.displayObjects"
-				displaymethod="dspLatestUpdates"
-				persist="0"
-			/>
-			<displayobject
-				name="MaintenanceTasks"
-				component="includes.displayObjects"
-				displaymethod="dspMaintenanceTasks"
-				persist="0"
-			/>
-			<displayobject
-				name="MaintenanceOld"
-				component="includes.displayObjects"
-				displaymethod="dspMaintenanceOld"
-				persist="0"
-			/>
-			<displayobject
-				name="MaintenanceOrphan"
-				component="includes.displayObjects"
-				displaymethod="dspMaintenanceOrphan"
-				persist="0"
-			/>
-			<displayobject
-				name="MaintenanceUndefined"
-				component="includes.displayObjects"
-				displaymethod="dspMaintenanceUndefined"
-				persist="0"
-			/>
-			<displayobject
-				name="AllPages"
-				component="includes.displayObjects"
-				displaymethod="dspAllPages"
-				persist="0"
-			/>
-			<displayobject
-				name="AllTags"
-				component="includes.displayObjects"
-				displaymethod="dspAllTags"
-				persist="0"
-			/>
-			<displayobject
-				name="Search results"
-				component="includes.displayObjects"
-				displaymethod="dspSearchResults"
-				persist="0"
-			/>
-			<displayobject
-				name="History"
-				component="includes.displayObjects"
-				displaymethod="dspHistory"
-				persist="0"
-			/>
-		</displayobjects>
 
 		<!-- 
 			Extensions :
@@ -220,38 +127,6 @@
 			See /default/includes/themes/MuraBootstrap/config.xml.cfm
 			for examples.
 		-->
-		<extensions>
-			<extension adminonly="0" availablesubtypes="Page/WikiPage" basekeyfield="contentHistID" basetable="tcontent" datatable="tclassextenddata" description="Wiki folder/container for wiki pages (using MuraWiki plugin)" hasassocfile="1" hasbody="0" hasconfigurator="0" hassummary="0" iconclass="icon-book" subtype="Wiki" type="Folder">
-				<relatedcontentset name="Pages" availableSubTypes="Page/WikiPage" />
-				<attributeset categoryid="" container="Advanced" name="Properties" orderno="1">
-					<attribute adminonly="1" defaultvalue="0" label="Is this Wiki initialized?" name="isInit" optionlist="1^0" orderno="1" required="1" type="RadioGroup" />
-					<attribute adminonly="1" defaultvalue="home" label="Label of home/index page" name="Home" orderno="2" required="1" type="TextBox" />
-					<attribute adminonly="1" defaultvalue="canvas" label="Wiki engine" name="WikiEngine" orderno="3" required="0" type="TextBox" />
-					<attribute adminonly="1" defaultvalue="en" label="Language" name="Language" orderno="4" required="0" type="TextBox" />
-					<attribute adminonly="1" defaultvalue="0" label="Include in site nav" name="SiteNav" orderno="5" required="0" type="RadioGroup" optionlist="1^0" />
-					<attribute adminonly="1" defaultvalue="0" label="Include in site search" name="SiteSearch" orderno="6" required="0" type="RadioGroup" optionlist="1^0" />
-					<attribute adminonly="1" defaultvalue="0" label="Use tags" name="UseTags" orderno="7" required="0" type="RadioGroup" optionlist="1^0" />
-					<attribute adminonly="1" defaultvalue="2" label="Region for main content" name="regionmain" orderno="8" required="0" type="TextBox" />
-					<attribute adminonly="1" defaultvalue="3" label="Region for sidebar" name="regionside" orderno="9" required="0" type="TextBox" />
-					<attribute adminonly="1" defaultvalue="standard.css" label="Stylesheet" name="stylesheet" orderno="10" required="0" type="TextBox" />
-					<attribute adminonly="1" defaultvalue="0" label="Use cfindex" name="UseIndex" orderno="12" required="1" type="RadioGroup" optionlist="1^0" />
-					<attribute adminonly="1" defaultvalue="" label="CollectionPath" name="CollectionPath" orderno="13" required="0" type="TextBox" />
-					<attribute adminonly="1" defaultvalue="{}" label="Options for wiki engine" name="EngineOpts" orderno="14" required="0" type="TextBox" />
-					<attribute adminonly="1" defaultvalue="0" label="Display edit links for anonymous users" name="EditLinksAnon" orderno="15" required="0" optionlist="1^0" type="RadioGroup" />
-				</attributeset>
-			</extension>
-			<extension adminonly="0" basekeyfield="contentHistID" basetable="tcontent" datatable="tclassextenddata" description="Wiki page (using MuraWiki plugin)" hasassocfile="1" hasbody="0" hasconfigurator="0" hassummary="0" iconclass="icon-file-text-alt" subtype="WikiPage" type="Page">
-				<relatedcontentset name="Wiki" availableSubTypes="Folder/Wiki" />
-				<relatedcontentset name="Attachment" availableSubTypes="File/Default" />
-				<attributeset categoryid="" container="Advanced" name="Properties" orderno="1">
-					<attribute adminonly="1" defaultvalue="" label="Outgoing wiki links" name="OutgoingLinks" orderno="1" required="0" type="TextBox" />
-					<attribute adminonly="1" defaultvalue="" label="Blurb" name="Blurb" orderno="2" required="0" type="TextBox" />
-					<attribute adminonly="1" defaultvalue="" label="Redirect to label" name="Redirect" orderno="3" required="0" type="TextBox" />
-					<attribute adminonly="1" defaultvalue="" label="Label" name="Label" orderno="4" required="0" type="TextBox" regex="[A-Za-z0-9]+" />
-					<attribute adminonly="1" defaultvalue="" label="Attachments" name="Attachments" orderno="5" required="0" type="TextBox" />
-				</attributeset>
-			</extension>
-		</extensions>
 		<!-- <extensions></extensions> -->
 
 
