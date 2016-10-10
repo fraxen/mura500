@@ -3,10 +3,10 @@
 	<plugin>
 
 		<!-- Name : the name of the plugin -->
-		<name>#variables.package#</name>
+		<name>#VARIABLES.package#</name>
 
 		<!-- Package : a unique, variable-safe name for the plugin -->
-		<package>#variables.package#</package>
+		<package>#VARIABLES.package#</package>
 
 		<!--
 			DirectoryFormat : 
@@ -17,7 +17,7 @@
 		<directoryFormat>packageOnly</directoryFormat>
 
 		<!-- Version : Meta information. May contain any value you wish. -->
-		<version>#variables.packageVersion#</version>
+		<version>#VARIABLES.packageVersion#</version>
 
 		<!--
 			LoadPriority : 
@@ -133,17 +133,17 @@
 		<extensions>
 			<extension type="Custom" subtype="Mura500">
 				<attributeset name="Mura500">
-					<attribute name="Frequency" type="TextBox" validation="Numeric" defaultValue="7" />
-					<attribute name="EmailEnabled" type="TextBox" validation="Numeric" defaultValue="0" />
-					<attribute name="Email" type="TextBox" />
-					<attribute name="EmailFrequency" type="TextBox" validation="Numeric" defaultValue="4" />
-					<attribute name="EmailBody" type="TextBox" validation="Date" />
-					<attribute name="GntpEnabled" type="TextBox" validation="Numeric" defaultValue="0" />
-					<attribute name="GntpHost" type="TextBox" defaultValue="localhost" />
-					<attribute name="GntpPort" type="TextBox" defaultValue="23053" />
-					<attribute name="GntpPassword" type="TextBox" defaultValue="" />
-					<attribute name="GntpIcon" type="TextBox" defaultValue="" />
-					<attribute name="LastUpdate" type="TextBox" defaultValue="" />
+					<attribute name="Frequency" type="TextBox" validation="Numeric" defaultValue="#VARIABLES.settingsDefault.Frequency#" />
+					<attribute name="EmailEnabled" type="TextBox" validation="Numeric" defaultValue="#VARIABLES.settingsDefault.EmailEnabled#" />
+					<attribute name="Email" type="TextBox" defaultValue="#VARIABLES.settingsDefault.Email#" />
+					<attribute name="EmailFrequency" type="TextBox" validation="Numeric" defaultValue="#VARIABLES.settingsDefault.EmailFrequency#" />
+					<attribute name="EmailBody" type="TextBox" defaultValue="" />
+					<attribute name="GntpEnabled" type="TextBox" validation="Numeric" defaultValue="#VARIABLES.settingsDefault.GntpEnabled#" />
+					<attribute name="GntpHost" type="TextBox" defaultValue="#VARIABLES.settingsDefault.GntpHost#" />
+					<attribute name="GntpPort" type="TextBox" defaultValue="#VARIABLES.settingsDefault.GntpPort#" />
+					<attribute name="GntpPassword" type="TextBox" defaultValue="#VARIABLES.settingsDefault.GntpPassword#" />
+					<attribute name="GntpIcon" type="TextBox" defaultValue="#VARIABLES.settingsDefault.GntpIcon#" />
+					<attribute name="LastUpdate" type="TextBox" validation="date" defaultValue="#VARIABLES.settingsDefault.LastUpdate#" />
 				</attributeset>
 			</extension>
 		</extensions>
