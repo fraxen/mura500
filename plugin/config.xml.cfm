@@ -1,11 +1,12 @@
+<cfinclude template="../config.cfm" />
 <cfoutput>
 	<plugin>
 
 		<!-- Name : the name of the plugin -->
-		<name>mura500</name>
+		<name>#variables.package#</name>
 
 		<!-- Package : a unique, variable-safe name for the plugin -->
-		<package>mura500/package>
+		<package>#variables.package#</package>
 
 		<!--
 			DirectoryFormat : 
@@ -16,7 +17,7 @@
 		<directoryFormat>packageOnly</directoryFormat>
 
 		<!-- Version : Meta information. May contain any value you wish. -->
-		<version>0.1</version>
+		<version>#variables.packageVersion#</version>
 
 		<!--
 			LoadPriority : 
@@ -107,7 +108,7 @@
 			<!-- only need to register the eventHandler.cfc via onApplicationLoad() -->
 			<eventHandler 
 					event="onApplicationLoad" 
-					component="includes.eventHandler" 
+					component="eventHandler" 
 					persist="0" />
 		</eventHandlers>
 
@@ -120,6 +121,7 @@
 			for CFC-based objects determine whether they are cached or instantiated
 			on a per-request basis.
 		-->
+		<displayobjects location="global"></displayobjects>
 
 		<!-- 
 			Extensions :
@@ -128,6 +130,23 @@
 			for examples.
 		-->
 		<!-- <extensions></extensions> -->
+		<extensions>
+			<extension type="Custom" subtype="Mura500">
+				<attributeset name="Mura500">
+					<attribute name="Frequency" type="TextBox" validation="Numeric" defaultValue="7" />
+					<attribute name="EmailEnabled" type="TextBox" validation="Numeric" defaultValue="0" />
+					<attribute name="Email" type="TextBox" />
+					<attribute name="EmailFrequency" type="TextBox" validation="Numeric" defaultValue="4" />
+					<attribute name="EmailBody" type="TextBox" validation="Date" />
+					<attribute name="GntpEnabled" type="TextBox" validation="Numeric" defaultValue="0" />
+					<attribute name="GntpHost" type="TextBox" defaultValue="localhost" />
+					<attribute name="GntpPort" type="TextBox" defaultValue="23053" />
+					<attribute name="GntpPassword" type="TextBox" defaultValue="" />
+					<attribute name="GntpIcon" type="TextBox" defaultValue="" />
+					<attribute name="LastUpdate" type="TextBox" defaultValue="" />
+				</attributeset>
+			</extension>
+		</extensions>
 
 
 		<!--
