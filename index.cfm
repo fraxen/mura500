@@ -17,33 +17,34 @@
 		);
 	}
 
-	sites = pluginConfig.getAssignedSites()
-		.reduce(function(carry,s) {
-			var settings = new mura.extend.extendObject().loadBy(
-					type: 'Custom',
-					subtype: 'Mura500',
-					SiteId: s.SiteId,
-					id: s.SiteId
-				);
-			if (settings.getIsNew()) {
-				settings.set({
-					SiteId: s.SiteId,
-					id: s.SiteId,
-					Frequency: 7,
-					EmailEnabled: 0,
-					Email: '',
-					EmailFrequency: 4,
-					EmailBody: '',
-					GntpEnabled: 0,
-					GntpHost: 'localhost',
-					GntpPort: 23053,
-					GntpPassword: '',
-					GntpIcon: ''
-				});
-			}
-			return carry.insert(s.SiteId, settings);
-		}, {});
+	settingsService = new model.services.settings(sites=ValueArray(pluginConfig.getAssignedSites().SiteID));
+
+	siteSettings = settingsService.getSiteSettings();
+
 	// }}}
+
+	// {{{ Handle submission
+	if (StructKeyExists(URL, 'action') && URL.action == 'update') {
+		siteSettings.each(function(SiteId) {
+			if (!StructKeyExists(FORM, '#SiteID#_EmailEnabled')) {
+				FORM['#SiteID#_EmailEnabled'] = 0;
+			}
+			if (!StructKeyExists(FORM, '#SiteID#_GntpEnabled')) {
+				FORM['#SiteID#_GntpEnabled'] = 0;
+			}
+			var SiteVals = FORM
+				.filter(function(v) {
+					return REFind('^#SiteID#', v)
+				})
+				.reduce(function(carry, v,w) {
+					return carry.Insert(ReReplace(v, '#SiteID#_', ''), w);
+				}, {})
+			settingsService.updateSite(SiteID, siteVals);
+		});
+		location(url='#application.configBean.getContext()#/plugins/mura500/', addtoken=false);
+	}
+	// }}}
+
 </cfscript>
 
 <!--- {{{ OUTPUT FORM --->
@@ -66,57 +67,58 @@
 <cfsavecontent variable="body">
 	<h2>Mura500 configuration</h2>
 	<div>(instructions/intro TODO)</div>
-	<cfif !Len(StructKeyArray(sites))>
+	<cfif !Len(StructKeyArray(siteSettings))>
 		<div><em>Plugin is not enabled for any sites yet</em></div>
 	<cfelse>
 	<br/>
-	<input type="submit" class="btn btn-default" value="Generate error templates now" style="WIDTH: 100%;" />
+	<input type="submit" class="btn btn-default" value="Generate error templates now" style="WIDTH: 100%;" onclick="document.location='#application.configBean.getContext()#/plugins/mura500/?action=generate'; return false;" />
 	<br/><br/>
-	<form method="post" id="configedit" name="mura500" action="#application.configBean.getContext()#/plugins/mura500/">
-		<cfloop index="SiteId" struct="#sites#">
+	<form method="post" id="configedit" name="mura500" action="#application.configBean.getContext()#/plugins/mura500/?action=update">
+		<cfloop index="SiteId" struct="#siteSettings#">
 			<fieldset name="site#SiteId#" id="site#SiteId#">
 				<legend>#SiteId#</legend>
+				<p><strong>#siteSettings[SiteId].domain#</strong><br />#ArrayToList(ListToArray(siteSettings[SiteId].domainalias, Chr(13)), ',')#</p>
 				<dl>
 					<dd><label for="#SiteId#_frequency">Update frequency (days)<br />(creating static error pages)<br/><em>Set to 0 to only do manual</em></label></dd>
-					<dt><input type="text" name="#SiteId#_frequency" id="#SiteId#_frequency" value="#sites[SiteId].getFrequency()#" placeholder="Update frequency (days)" /></dt>
+					<dt><input type="text" name="#SiteId#_frequency" id="#SiteId#_frequency" value="#siteSettings[SiteId].getFrequency()#" placeholder="Update frequency (days)" /></dt>
 				</dl>
 				<dl>
 					<dd><label for="#SiteId#_emailenabled">Email of error reports</label></dd>
-					<dt><input type="checkbox" name="#SiteId#_emailenabled" id="#SiteId#_emailenabled" value="1" <cfif sites[SiteId].getEmailEnabled()>checked="checked"</cfif>/></dt>
+					<dt><input type="checkbox" name="#SiteId#_emailenabled" id="#SiteId#_emailenabled" value="1" <cfif siteSettings[SiteId].getEmailEnabled()>checked="checked"</cfif>/></dt>
 				</dl>
 				<dl>
 					<dd><label for="#SiteId#_emailfrequency">Email frequency (hours)<br />(prevents duplicate reports/emails)<br/><em>Set to 0 to send all</em></label></dd>
-					<dt><input type="text" name="#SiteId#_emailfrequency" id="#SiteId#_emailfrequency" value="#sites[SiteId].getEmailFrequency()#" placeholder="Email frequency (hours)" <cfif !sites[SiteId].getEmailEnabled()>disabled="disabled"</cfif>/></dt>
+					<dt><input type="text" name="#SiteId#_emailfrequency" id="#SiteId#_emailfrequency" value="#siteSettings[SiteId].getEmailFrequency()#" placeholder="Email frequency (hours)" <cfif !siteSettings[SiteId].getEmailEnabled()>disabled="disabled"</cfif>/></dt>
 				</dl>
 				<dl>
 					<dd><label for="#SiteId#_email">Email sendlist<br /><em>Comma-separated for multiple addresses</em></label></dd>
-					<dt><input type="text" name="#SiteId#_email" id="#SiteId#_email" value="#sites[SiteId].getEmail()#" placeholder="Email sendlist" <cfif !sites[SiteId].getEmailEnabled()>disabled="disabled"</cfif>/></dt>
+					<dt><input type="text" name="#SiteId#_email" id="#SiteId#_email" value="#siteSettings[SiteId].getEmail()#" placeholder="Email sendlist" <cfif !siteSettings[SiteId].getEmailEnabled()>disabled="disabled"</cfif>/></dt>
 				</dl>
 				<dl>
 					<dd><label for="#SiteId#_emailbody">Email body<br /><em>cfml is ok</em></label></dd>
 					<dt>
-						<textarea name="#SiteId#_emailbody" id="#SiteId#_emailbody" placeholder="Email body" <cfif !sites[SiteId].getEmailEnabled()>disabled="disabled"</cfif>>#sites[SiteId].getEmailBody()#</textarea>
+						<textarea name="#SiteId#_emailbody" id="#SiteId#_emailbody" placeholder="Email body" <cfif !siteSettings[SiteId].getEmailEnabled()>disabled="disabled"</cfif>>#siteSettings[SiteId].getEmailBody()#</textarea>
 					</dt>
 				</dl>
 				<dl>
 					<dd><label for="#SiteID#_gntpenabled">GNTP (growl) notifications</label</dd>
-					<dt><input type="checkbox" name="#SiteId#_gntpenabled" id="#SiteId#_gntpenabled" value="1" <cfif sites[SiteId].getGntpEnabled()>checked="checked"</cfif>/></dt>
+					<dt><input type="checkbox" name="#SiteId#_gntpenabled" id="#SiteId#_gntpenabled" value="1" <cfif siteSettings[SiteId].getGntpEnabled()>checked="checked"</cfif>/></dt>
 				</dl>
 				<dl>
 					<dd><label for="#SiteID#_gntphost">GNTP host</label</dd>
-					<dt><input type="text" name="#SiteId#_gntphost" id="#SiteId#_gntphost" value="#sites[SiteId].getGntpHost()#" placeholder="hostname for GNTP" <cfif !sites[SiteId].getGntpEnabled()>disabled="disabled"</cfif>/></dt>
+					<dt><input type="text" name="#SiteId#_gntphost" id="#SiteId#_gntphost" value="#siteSettings[SiteId].getGntpHost()#" placeholder="hostname for GNTP" <cfif !siteSettings[SiteId].getGntpEnabled()>disabled="disabled"</cfif>/></dt>
 				</dl>
 				<dl>
 					<dd><label for="#SiteID#_gntpport">GNTP port</label</dd>
-					<dt><input type="text" name="#SiteId#_gntpport" id="#SiteId#_gntpport" value="#sites[SiteId].getGntpPort()#" placeholder="network port for GNTP" <cfif !sites[SiteId].getGntpEnabled()>disabled="disabled"</cfif>/></dt>
+					<dt><input type="text" name="#SiteId#_gntpport" id="#SiteId#_gntpport" value="#siteSettings[SiteId].getGntpPort()#" placeholder="network port for GNTP" <cfif !siteSettings[SiteId].getGntpEnabled()>disabled="disabled"</cfif>/></dt>
 				</dl>
 				<dl>
 					<dd><label for="#SiteID#_gntppassword">GNTP password</label</dd>
-					<dt><input type="text" name="#SiteId#_gntppassword" id="#SiteId#_gntppassword" value="#sites[SiteId].getGntpPassword()#" placeholder="password for GNTP" <cfif !sites[SiteId].getGntpEnabled()>disabled="disabled"</cfif>/></dt>
+					<dt><input type="text" name="#SiteId#_gntppassword" id="#SiteId#_gntppassword" value="#siteSettings[SiteId].getGntpPassword()#" placeholder="password for GNTP" <cfif !siteSettings[SiteId].getGntpEnabled()>disabled="disabled"</cfif>/></dt>
 				</dl>
 				<dl>
 					<dd><label for="#SiteID#_gntpicon">Icon for notifications<br /><em>A valid full URL</em></label</dd>
-					<dt><input type="text" name="#SiteId#_gntpicon" id="#SiteId#_gntpicon" value="#sites[SiteId].getGntpIcon()#" placeholder="Icon url for GNTP" <cfif !sites[SiteId].getGntpEnabled()>disabled="disabled"</cfif>/></dt>
+					<dt><input type="text" name="#SiteId#_gntpicon" id="#SiteId#_gntpicon" value="#siteSettings[SiteId].getGntpIcon()#" placeholder="Icon url for GNTP" <cfif !siteSettings[SiteId].getGntpEnabled()>disabled="disabled"</cfif>/></dt>
 				</dl>
 			</fieldset>
 		</cfloop>
@@ -133,7 +135,7 @@
 	jsLibLoaded: true
 )#
 <script type="text/javascript">
-	<cfloop index="SiteId" struct="#sites#">
+	<cfloop index="SiteId" struct="#siteSettings#">
 		$('###SiteID#_emailenabled').change(function() {
 			$('###SiteID#_email').prop('disabled', !$(this).is(':checked'));
 			$('###SiteID#_emailbody').prop('disabled', !$(this).is(':checked'));
