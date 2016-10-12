@@ -11,7 +11,7 @@
 		GntpHost: 'localhost',
 		GntpPort: 23053,
 		GntpPassword: '',
-		GntpIcon: 'https://github.com/fraxen/mura500/blob/master/defaulticon.png',
+		GntpIcon: 'https://raw.githubusercontent.com/fraxen/mura500/master/defaulticon.png',
 		LastUpdate: CreateODBCDateTime(Now() - CreateTimeSpan(365,0,0,0))
 	};
 	VARIABLES.default404 = {
