@@ -44,4 +44,18 @@
 		title: 'Server error (500)',
 		body: '<p><i style="float:right; font-size: 10em;" class="fa fa-exclamation-circle" aria-hidden="true"></i>The link you are requesting have caused an internal server error. This might be an issue with the specific link, or there might be issues witht the server.</p><p>Please try again shortly, or try any of the links below:</p><ul><li>Try the navigation on this page to find the information you are looking for.</li><li>If you typed the address, make sure it is spelled correctly.</li><li>Go to the <a href="/">home page</a> of this site for more information.</li><li>If this error continues, do not hesitate to contact the webmaster if you believe there is an error that can be corrected.</li></ul>'
 	}
+	VARIABLES.beanFactory = new includes.ioc(
+			'/#variables.package#/model',
+			{
+				strict: true,
+				initMethod: 'setup',
+				constants: {
+					sites: ValueArray(application.serviceFactory.getBean('muraScope').init('default').getPlugin('Mura500').getAssignedSites().SiteID),
+					settingsDefault: VARIABLES.settingsDefault,
+					default404: VARIABLES.default404,
+					default500: VARIABLES.default500,
+					templateCache: VARIABLES.templateCache
+				}
+			}
+		);
 </cfscript>
