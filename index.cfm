@@ -17,13 +17,13 @@
 		);
 	}
 
-	settingsService = new model.services.settings(sites=ValueArray(pluginConfig.getAssignedSites().SiteID));
+	settingsService = VARIABLES.beanFactory.getBean('SettingsService');
 
 	siteSettings = settingsService.getSiteSettings();
 
 	// }}}
 
-	// {{{ Handle submission
+	// {{{ Handle actions
 	if (StructKeyExists(URL, 'action') && URL.action == 'update') {
 		siteSettings.each(function(SiteId) {
 			if (!StructKeyExists(FORM, '#SiteID#_EmailEnabled')) {
@@ -43,8 +43,11 @@
 		});
 		location(url='#application.configBean.getContext()#/plugins/mura500/', addtoken=false);
 	}
+	if (StructKeyExists(URL, 'action') && URL.action == 'generate') {
+		VARIABLES.beanFactory.getBean('ErrorManagerService').forceGenerateAll();
+		location(url='#application.configBean.getContext()#/plugins/mura500/', addtoken=false);
+	}
 	// }}}
-
 </cfscript>
 
 <!--- {{{ OUTPUT FORM --->
@@ -66,7 +69,7 @@
 <cfoutput>
 <cfsavecontent variable="body">
 	<h2>Mura500 configuration</h2>
-	<div>(instructions/intro TODO)</div>
+	<div>(instructions/intro TODO) NOTE ABOUT APPLICATION RELOAD</div>
 	<cfif !Len(StructKeyArray(siteSettings))>
 		<div><em>Plugin is not enabled for any sites yet</em></div>
 	<cfelse>
@@ -77,7 +80,8 @@
 		<cfloop index="SiteId" struct="#siteSettings#">
 			<fieldset name="site#SiteId#" id="site#SiteId#">
 				<legend>#SiteId#</legend>
-				<p><strong>#siteSettings[SiteId].domain#</strong><br />#ArrayToList(ListToArray(siteSettings[SiteId].domainalias, Chr(13)), ',')#</p>
+				<p><strong>#siteSettings[SiteId].domain#</strong><br />#ArrayToList(siteSettings[SiteId].domainalias, ',')#</p>
+				<p><em>Last generated: #DateFormat(siteSettings[SiteId].getLastUpdate(), 'yyyy-mm-dd')# #TimeFormat(siteSettings[SiteId].getLastUpdate(), 'HH:mm')#</em></p>
 				<dl>
 					<dd><label for="#SiteId#_frequency">Update frequency (days)<br />(creating static error pages)<br/><em>Set to 0 to only do manual</em></label></dd>
 					<dt><input type="text" name="#SiteId#_frequency" id="#SiteId#_frequency" value="#siteSettings[SiteId].getFrequency()#" placeholder="Update frequency (days)" /></dt>

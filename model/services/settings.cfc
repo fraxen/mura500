@@ -1,8 +1,12 @@
 <cfscript>
 component persistent="false" accessors="true" output="false" extends='mura.cfobject' {
 	property name='sites' type='array';
+	property name='beanFactory';
 	property name='siteSettings' type='struct';
-	include '../../config.cfm';
+	property name='settingsDefault' type='struct';
+	property name='default404' type='struct';
+	property name='default500' type='struct';
+	property name='templateCache' type='string';
 
 	private array function arrayUnique(inArray) {
 		return StructKeyArray(
@@ -12,10 +16,18 @@ component persistent="false" accessors="true" output="false" extends='mura.cfobj
 		);
 	}
 
-	public any function init(sites) {
+	public any function init(required sites, required settingsDefault, required default404, required default500, required templateCache) {
+		setSites(ARGUMENTS.sites);
+		setSettingsDefault(ARGUMENTS.settingsDefault);
+		setDefault404(ARGUMENTS.default404);
+		setDefault500(ARGUMENTS.default500);
+		setTemplateCache(ARGUMENTS.templateCache);
+		return THIS;
+	}
+
+	public any function setup() {
 		var ss = {};
 		var adminEmail = ValueArray(queryExecute("SELECT * FROM tusers WHERE s2 = 1").Email);
-		setSites(ARGUMENTS.sites);
 		getSites().each(function(SiteId) {
 			var settings = new mura.extend.extendObject().loadBy(
 				type: 'Custom',
@@ -29,26 +41,51 @@ component persistent="false" accessors="true" output="false" extends='mura.cfobj
 					SiteId: SiteId,
 					id: SiteId,
 					isnew: 0,
-					Frequency: VARIABLES.settingsDefault.Frequency,
-					EmailEnabled: VARIABLES.settingsDefault.EmailEnabled,
+					Frequency: getsettingsDefault().Frequency,
+					EmailEnabled: getsettingsDefault().EmailEnabled,
 					Email: ArrayToList(
 						Duplicate(adminEmail)
 							.Append(siteConfig.getContactEmail())
-							.Append(VARIABLES.settingsDefault.Email)
+							.Append(getsettingsDefault().Email)
 					),
-					EmailFrequency: VARIABLES.settingsDefault.EmailFrequency,
-					EmailBody: VARIABLES.settingsDefault.EmailBody,
-					GntpEnabled: VARIABLES.settingsDefault.GntpEnabled,
-					GntpHost: VARIABLES.settingsDefault.GntpHost,
-					GntpPort: VARIABLES.settingsDefault.GntpPort,
-					GntpPassword: VARIABLES.settingsDefault.GntpPassword,
-					GntpIcon: VARIABLES.settingsDefault.GntpIcon,
-					LastUpdate: VARIABLES.settingsDefault.LastUpdate,
+					EmailFrequency: getsettingsDefault().EmailFrequency,
+					EmailBody: getsettingsDefault().EmailBody,
+					GntpEnabled: getsettingsDefault().GntpEnabled,
+					GntpHost: getsettingsDefault().GntpHost,
+					GntpPort: getsettingsDefault().GntpPort,
+					GntpPassword: getsettingsDefault().GntpPassword,
+					GntpIcon: getsettingsDefault().GntpIcon,
+					LastUpdate: getsettingsDefault().LastUpdate,
 				});
 				settings.save();
 			}
 			settings.domain = siteConfig.getDomain();
-			settings.domainAlias = siteConfig.getDomainAlias();
+			settings.domainAlias = ListToArray(siteConfig.getDomainAlias(), '#Chr(13)##Chr(10)#');
+			settings.fromAddress = siteConfig.getContact();
+			settings.gntp = {};
+			if (settings.getGntpEnabled()) {
+				settings.gntp = getBeanFactory().getBean('notify', {
+					GntpHost: settings.getGntpHost(),
+					GntpPort: settings.getGntpPort(),
+					GntpPassword: settings.getGntpPassword(),
+					GntpIcon: settings.getGntpIcon()
+				});
+			}
+			settings.notify = function(message, siteId=settings.getSiteID(), gntp=settings.gntp) {
+				if (isObject(ARGUMENTS.gntp)) {
+					ARGUMENTS.gntp.notify(ARGUMENTS.siteid, ARGUMENTS.message);
+				}
+			}
+			settings.mailer = function(subject, body, SiteId=settings.getSiteID(), sendto=settings.getEmail(), emailenabled=settings.getEmailEnabled()) {
+				if (ARGUMENTS.EmailEnabled) {
+					getBean('mailer').sendHTML(
+						siteid = ARGUMENTS.SiteId,
+						sendto = ARGUMENTS.sendto,
+						subject = '[#ARGUMENTS.SiteId#] #ARGUMENTS.Subject#',
+						html = '<h1>#ARGUMENTS.Subject#</h1>#ARGUMENTS.Body#'
+					);
+				}
+			}
 			var page404 = getBean('content').loadBy(filename='404', siteid=SiteId);
 			if (page404.getIsNew()) {
 				page404.set(VARIABLES.default404).save();
@@ -57,6 +94,8 @@ component persistent="false" accessors="true" output="false" extends='mura.cfobj
 			if (page500.getIsNew()) {
 				page500.set(VARIABLES.default500).save();
 			}
+			settings.Url404 = siteConfig.getContentRenderer().$.CreateHref(filename=page404.getFilename(), siteid=SiteId, complete=true);
+			settings.Url500 = siteConfig.getContentRenderer().$.CreateHref(filename=page500.getFilename(), siteid=SiteId, complete=true);
 			ss.Insert(SiteId, settings);
 		});
 		setSiteSettings(ss);
