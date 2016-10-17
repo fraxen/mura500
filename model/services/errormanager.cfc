@@ -42,15 +42,14 @@ component persistent="false" accessors="true" output="false" extends='mura.cfobj
 		return THIS;
 	}
 
-	public any function onSiteMonitor() {
-		for (var SiteId in getSettingsService().getSiteSettings()) {
-			if (
-				getSettingsService().getSiteSettings()[SiteId].getFrequency()
-				AND
-				DateDiff('d', getSettingsService().getSiteSettings()[SiteId].getLastUpdate(), Now()) > getSettingsService().getSiteSettings()[SiteId].getFrequency()
-			) {
-				downloadTemplates(getSettingsService().getSiteSettings()[SiteId]);
-			}
+	public any function onSiteMonitor(SiteID) {
+		if (
+			getSettingsService().getSiteSettings()[ARGUMENTS.SiteId].getFrequency()
+			AND
+			DateDiff('d', getSettingsService().getSiteSettings()[ARGUMENTS.SiteId].getLastUpdate(), Now()) > getSettingsService().getSiteSettings()[ARGUMENTS.SiteId].getFrequency()
+		) {
+			getBeanFactory().getBean('notify').notify(ARGUMENTS.SiteId, ARGUMENTS.SiteId);
+			downloadTemplates(getSettingsService().getSiteSettings()[ARGUMENTS.SiteId]);
 		}
 		return THIS;
 	}

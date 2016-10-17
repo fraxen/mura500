@@ -7,7 +7,7 @@ component persistent="false" accessors="true" output="false" extends="mura.plugi
 	include 'config.cfm';
 
 	public void function onSiteMonitor(required struct $) {
-		getErrorManagerService().onSiteMonitor();
+		getErrorManagerService().onSiteMonitor($.event('siteid'));
 	}
 
 	public void function onApplicationLoad(required struct $) {
