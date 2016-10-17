@@ -8,9 +8,26 @@ component persistent="false" accessors="true" output="false" extends='mura.cfobj
 	private string function dumpString(d) {
 		var out = '';
 		savecontent variable='out' {
-			WriteDump(ARGUMENTS.d, true);
+			WriteDump(var=ARGUMENTS.d, expand=true, format='html', showUDFs=false);
 		}
 		return out;
+	}
+
+	private void function toast(site, message) {
+		if (isObject(ARGUMENTS.site.gntp)) {
+			ARGUMENTS.site.gntp.notify(ARGUMENTS.site.getSiteID(), ARGUMENTS.message);
+		}
+	}
+
+	private void function sendmail(site, subject, body) {
+		if (ARGUMENTS.site.getEmailEnabled()) {
+			getBean('mailer').sendHTML(
+				siteid = ARGUMENTS.site.getSiteID(),
+				sendto = ARGUMENTS.site.getEmail(),
+				subject = '[#ARGUMENTS.site.getSiteID()#] #ARGUMENTS.Subject#',
+				html = '<h1>#ARGUMENTS.Subject#</h1>#ARGUMENTS.Body#'
+			);
+		}
 	}
 
 	public any function setup() {

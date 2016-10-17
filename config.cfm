@@ -7,7 +7,7 @@
 		EmailEnabled: 0,
 		Email: '',
 		EmailFrequency: 4,
-		EmailBody: '<h1>Internal Server Error on ##CGI.SERVERNAME##</h1><cfdump var="##cgi##"><cfdump var="##url##" />',
+		EmailBody: '<h1>Internal Server Error on ##CGI.SERVER_NAME##</h1><hr/><div><h2>CGI</h2>##dumpString(CGI)##<hr/><h2>URL</h2>##dumpString(URL)##</div>',
 		GntpEnabled: 0,
 		GntpHost: 'localhost',
 		GntpPort: 23053,
