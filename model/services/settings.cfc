@@ -43,7 +43,8 @@ component persistent="false" accessors="true" output="false" extends='mura.cfobj
 				id: SiteId
 			);
 			var siteConfig = APPLICATION.serviceFactory.getBean('muraScope').init(siteId).siteConfig();
-			if (!isDate(settings.getLastUpdate())) {
+			settings.setIsNew(!isDate(settings.getLastUpdate()));
+			if (settings.getIsNew()) {
 				thisEmail = Duplicate(adminEmail);
 				if (siteConfig.getContactEmail() != '') {
 					ArrayAppend(thisEmail, siteConfig.getContactEmail());
