@@ -112,7 +112,11 @@ component persistent="false" accessors="true" output="false" extends='mura.cfobj
 						.setUrl(pages[code].url)
 						.send()
 						.getPrefix();
-					if (pageRequest.status_code == 200) {
+					if (
+						(StructKeyExists(pageRequest, 'status_code') && pageRequest.status_code == 200)
+						||
+						(StructKeyExists(pageRequest.Responseheader, 'status_code') && pageRequest.Responseheader.status_code == 200)
+					) {
 						fileWrite(pages[code].file, pageRequest.filecontent);
 						ARGUMENTS.Site.setLastUpdate(Now());
 						ARGUMENTS.Site.Save();
