@@ -67,6 +67,7 @@ component persistent="false" accessors="true" output="false" extends='mura.cfobj
 					GntpIcon: getsettingsDefault().GntpIcon,
 					LastUpdate: getsettingsDefault().LastUpdate,
 					Email: ArrayToList(thisEmail),
+					GntpEnabled: getSettingsDefault().GntpEnabled && getHasGntp(),
 				});
 				settings.save();
 			}
