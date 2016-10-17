@@ -22,7 +22,10 @@ component displayname='notify' name='notify' accessors='true' {
 			VARIABLES.gc = createObject('java', 'net.sf.libgrowl.GrowlConnector').init(getGntpHost(), getGntpPort());
 			VARIABLES.app = createObject('java', 'net.sf.libgrowl.Application').init(getApplication(), getGntpIcon());
 			VARIABLES.ntype = createObject('java', 'net.sf.libgrowl.NotificationType').init('message');
-			VARIABLES.gc.setPassword(getGntpPassword());
+			try {
+				VARIABLES.gc.setPassword(getGntpPassword());
+			}
+			catch(any e) {}
 			VARIABLES.gc.register(VARIABLES.app, [VARIABLES.ntype]);
 		}
 		catch(any e) {
