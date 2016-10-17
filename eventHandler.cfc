@@ -15,8 +15,7 @@ component persistent="false" accessors="true" output="false" extends="mura.plugi
 	public void function onApplicationLoad(required struct $) {
 		// register this file as a Mura eventHandler
 		VARIABLES.pluginConfig.addEventHandler(this);
-		setSettingsService(VARIABLES.beanFactory.getBean('SettingsService', {sites:ValueArray(pluginConfig.getAssignedSites().SiteID)}));
-		setErrorManagerService(VARIABLES.beanFactory.getBean('ErrorManagerService'));
+		setSettingsService(getBeanFactory().getBean('SettingsService', {sites: VARIABLES.sites}));
 	}
 	
 }
