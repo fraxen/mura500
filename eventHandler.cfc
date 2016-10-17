@@ -4,6 +4,7 @@ component persistent="false" accessors="true" output="false" extends="mura.plugi
 	property name='ErrorManagerService';
 
 	include 'config.cfm'
+	include 'config.cfm';
 
 	public void function onSiteMonitor(required struct $) {
 		getErrorManagerService().onSiteMonitor();

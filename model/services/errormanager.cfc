@@ -41,8 +41,8 @@ component persistent="false" accessors="true" output="false" extends='mura.cfobj
 	private void function downloadTemplates(Site) {
 		var request = '';
 		var pages = {
-			'404': {url: ARGUMENTS.Site.Url404, file: '#getSettingsService().getTemplateCache()#/#ARGUMENTS.Site.getSiteID()#_404.html', basic: getBasic404()},
-			'500': {url: ARGUMENTS.Site.Url500, file: '#getSettingsService().getTemplateCache()#/#ARGUMENTS.Site.getSiteID()#_500.html', basic: getBasic500()},
+			'404': {url: ARGUMENTS.Site.Url404, file: '#getSettingsService().getTemplateCache()##ARGUMENTS.Site.getSiteID()#_404.html', basic: getBasic404()},
+			'500': {url: ARGUMENTS.Site.Url500, file: '#getSettingsService().getTemplateCache()##ARGUMENTS.Site.getSiteID()#_500.html', basic: getBasic500()}
 		};
 		lock scope='application' type='exclusive' timeout=200 {
 			for (var code in pages) {

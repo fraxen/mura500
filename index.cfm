@@ -1,5 +1,5 @@
 <cfscript>
-	include 'config.cfm'
+	include 'config.cfm';
 	// This is a bit ugly, one monolithic file, but oh well!
 
 	// {{{ Initialization
@@ -25,22 +25,20 @@
 
 	// {{{ Handle actions
 	if (StructKeyExists(URL, 'action') && URL.action == 'update') {
-		siteSettings.each(function(SiteId) {
+		for (SiteId in siteSettings) {
+			SiteVals = {};
 			if (!StructKeyExists(FORM, '#SiteID#_EmailEnabled')) {
 				FORM['#SiteID#_EmailEnabled'] = 0;
 			}
 			if (!StructKeyExists(FORM, '#SiteID#_GntpEnabled')) {
 				FORM['#SiteID#_GntpEnabled'] = 0;
 			}
-			var SiteVals = FORM
-				.filter(function(v) {
-					return REFind('^#SiteID#', v)
-				})
-				.reduce(function(carry, v,w) {
-					return carry.Insert(ReReplace(v, '#SiteID#_', ''), w);
-				}, {})
-			settingsService.updateSite(SiteID, siteVals);
-		});
+			for (f in StructKeyArray(FORM)) {
+				if (!REFindNoCase('^#SiteID#', f)) { continue; }
+				StructInsert(SiteVals, REReplaceNoCase(f, '#SiteID#_', ''), Form[f]);
+			}
+			getSettingsService().updateSite(SiteID, siteVals);
+		}
 		location(url='#application.configBean.getContext()#/plugins/mura500/', addtoken=false);
 	}
 	if (StructKeyExists(URL, 'action') && URL.action == 'generate') {
@@ -53,7 +51,7 @@
 <!--- {{{ OUTPUT FORM --->
 
 <!--- {{{ STYLE --->
-<cfhtmlhead>
+<cfsavecontent variable="head">
 	<style type="text/css">
 		#configedit legend {FONT-WEIGHT: Bold; WIDTH: auto; BORDER: 0; PADDING: 0.2em; MARGIN: 0;}
 		#configedit fieldset {PADDING: 1em;}
@@ -62,7 +60,8 @@
 		#configedit dt {FLOAT: Left; WIDTH: 64%;}
 		#configedit input[type=text], #configedit textarea {WIDTH: 100%;}
 	</style>
-</cfhtmlhead>
+</cfsavecontent>
+<cfhtmlhead text="#head#" />
 <!--- }}} --->
 
 <!--- {{{ BODY --->
@@ -77,7 +76,7 @@
 	<input type="submit" class="btn btn-default" value="Generate error templates now" style="WIDTH: 100%;" onclick="document.location='#application.configBean.getContext()#/plugins/mura500/?action=generate'; return false;" />
 	<br/><br/>
 	<form method="post" id="configedit" name="mura500" action="#application.configBean.getContext()#/plugins/mura500/?action=update">
-		<cfloop index="SiteId" struct="#siteSettings#">
+		<cfloop index="SiteId" array="#StructKeyArray(siteSettings)#">
 			<fieldset name="site#SiteId#" id="site#SiteId#">
 				<legend>#SiteId#</legend>
 				<p><strong>#siteSettings[SiteId].domain#</strong><br />#ArrayToList(siteSettings[SiteId].domainalias, ',')#</p>
@@ -139,7 +138,6 @@
 	jsLibLoaded: true
 )#
 <script type="text/javascript">
-	<cfloop index="SiteId" struct="#siteSettings#">
 		$('###SiteID#_emailenabled').change(function() {
 			$('###SiteID#_email').prop('disabled', !$(this).is(':checked'));
 			$('###SiteID#_emailbody').prop('disabled', !$(this).is(':checked'));
@@ -150,6 +148,7 @@
 			$('###SiteID#_gntpport').prop('disabled', !$(this).is(':checked'));
 			$('###SiteID#_gntppassword').prop('disabled', !$(this).is(':checked'));
 			$('###SiteID#_gntpicon').prop('disabled', !$(this).is(':checked'));
+	<cfloop index="SiteId" array="#StructKeyArray(siteSettings)#">
 		});
 	</cfloop>
 </script>
