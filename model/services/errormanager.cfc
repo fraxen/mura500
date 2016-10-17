@@ -69,6 +69,7 @@
 		param name='URL.Debug' default=false;
 		var site = '';
 		var ex = ARGUMENTS.$.event('exception');
+		WriteLog(type='ERROR', file='muraGlobalError', text='#ex.Message#');
 		add500headers();
 		if (!URL.Debug) {
 			if (StructKeyExists(getSettingsService().getSiteSettings(), ARGUMENTS.$.event('SiteId'))) {
