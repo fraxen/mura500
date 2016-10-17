@@ -72,8 +72,16 @@
 <cfoutput>
 <cfsavecontent variable="body">
 	<h2>Mura500 configuration</h2>
-	<div>(instructions/intro TODO) NOTE ABOUT APPLICATION RELOAD</div>
-	<cfif !Len(StructKeyArray(siteSettings))>
+	<div>
+		<p>This is a simple plugin to (periodically) generate static pages for 404 (Not found) and 500 (Internal server error) messages. Mura has good handling of 404 errors for requests to pages that go through the CMS, but that might not include e.g. css/js resources. For a 500 page, the plugin tries to download the page <em>/500</em> on the site in question. If those pages do not exist, they will be created with sensible defaults, that you can further customize.</p>
+		<p>There are multiple places where you can add these as settings: in the webserver (Apache/Nginx/IIS etc), in the servlet engine (Jetty/Tomcat etc) and in the coldfusion/cfml engine (Lucee/ACF). Instructions on how to specify that is outside the scope of this plugin, please refer to the documentation for the piece of software in question.</p>
+		<p>For the error pages to work - make sure you have <em>debuggingenabled=false</em> in your <em>settings.ini.cfm</em>.</p>
+		<p>As for the default error page <em>errortemplate</em> in <em>settings.ini.cfm</em>, you can set that to <em>#relErrorCache#500.cfm</em> - this is also the path that you would use for the servlet engine error page.</p>
+		<p>Note that the email and gntp notifications only apply to errors that are trapped within Mura.</p>
+		<p>For optional Growl notifications (GNTP) install the <em>libgrowl.jar</em> library in your servlet/coldfusion engine.</p>
+		<p>After any changes to this page, reload the application to make sure that the settings are loaded.</p>
+	</div>
+	<cfif !ArrayLen(StructKeyArray(siteSettings))>
 		<div><em>Plugin is not enabled for any sites yet</em></div>
 	<cfelse>
 	<br/>
