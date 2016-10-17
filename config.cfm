@@ -58,20 +58,15 @@
 	}
 
 	lock name='mura500' type='exclusive' timeout=200 {
-		VARIABLES.beanFactory = new includes.ioc(
-				'/#variables.package#/model',
-				{
-					strict: true,
-					initMethod: 'setup',
-					constants: {
-						sites: VARIABLES.sites,
-						settingsDefault: VARIABLES.settingsDefault,
-						default404: VARIABLES.default404,
-						default500: VARIABLES.default500,
-						templateCache: VARIABLES.templateCache,
-						hasGNTP: VARIABLES.hasGNTP
-					}
-				}
-			);
+		VARIABLES.SettingsService = new model.services.settings(
+			sites: VARIABLES.sites,
+			settingsDefault: VARIABLES.settingsDefault,
+			default404: VARIABLES.default404,
+			default500: VARIABLES.default500,
+			templateCache: VARIABLES.templateCache,
+			hasGNTP: VARIABLES.hasGNTP
+		);
+		VARIABLES.ErrorManagerService = new model.services.errormanager(VARIABLES.settingsService).setup();
+		VARIABLES.SettingsService.setErrorManagerService(VARIABLES.ErrorManagerService).setup();
 	}
 </cfscript>

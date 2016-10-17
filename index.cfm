@@ -17,7 +17,8 @@
 		);
 	}
 
-	getSettingsService = function() { return VARIABLES.beanFactory.getBean('SettingsService');};
+	getSettingsService = function() { return VARIABLES.SettingsService;};
+	getErrorManagerService = function() { return VARIABLES.ErrorManagerService;};
 
 	siteSettings = getSettingsService().getSiteSettings();
 
@@ -44,7 +45,7 @@
 		location(url='#application.configBean.getContext()#/plugins/mura500/', addtoken=false);
 	}
 	if (StructKeyExists(URL, 'action') && URL.action == 'generate') {
-		VARIABLES.beanFactory.getBean('ErrorManagerService').forceGenerateAll();
+		getErrorManagerService().forceGenerateAll();
 		location(url='#application.configBean.getContext()#/plugins/mura500/', addtoken=false);
 	}
 	// }}}

@@ -1,5 +1,4 @@
 <cfcomponent output="false" accessors="true" extends="mura.cfobject">
-	<cfproperty name="beanFactory" />
 	<cfproperty name="settingsService" />
 	<cfproperty name="basic404" />
 	<cfproperty name="basic500" />
@@ -36,9 +35,15 @@
 		}
 	}
 
+	public any function init(settingsService) {
+		setSettingsService(ARGUMENTS.settingsService);
+		return THIS;
+	}
+
 	public any function setup() {
 		setBasic404('<html><head><title>#getSettingsService().getDefault404().Title#</title></head><body><h1>#getSettingsService().getDefault404().Title#</h1><p>#getSettingsService().getDefault404().Summary#</p></body></html>');
 		setBasic500('<html><head><title>#getSettingsService().getDefault500().Title#</title></head><body><h1>#getSettingsService().getDefault500().Title#</h1><p>#getSettingsService().getDefault500().Summary#</p></body></html>');
+		return THIS;
 	}
 
 	public any function forceGenerateAll() {
@@ -54,7 +59,6 @@
 			AND
 			DateDiff('d', getSettingsService().getSiteSettings()[ARGUMENTS.SiteId].getLastUpdate(), Now()) > getSettingsService().getSiteSettings()[ARGUMENTS.SiteId].getFrequency()
 		) {
-			getBeanFactory().getBean('notify').notify(ARGUMENTS.SiteId, ARGUMENTS.SiteId);
 			downloadTemplates(getSettingsService().getSiteSettings()[ARGUMENTS.SiteId]);
 		}
 		return THIS;

@@ -1,14 +1,13 @@
 <cfscript>
 component persistent="false" accessors="true" output="false" extends='mura.cfobject' {
 	property name='sites' type='array';
-	property name='beanFactory';
-	property name='errorManagerService';
 	property name='siteSettings' type='struct';
 	property name='settingsDefault' type='struct';
 	property name='default404' type='struct';
 	property name='default500' type='struct';
 	property name='templateCache' type='string';
 	property name='hasGNTP' type='boolean';
+	property name='errorManagerService';
 
 	private array function arrayUnique(inArray) {
 		return StructKeyArray(
@@ -75,12 +74,12 @@ component persistent="false" accessors="true" output="false" extends='mura.cfobj
 			settings.fromAddress = siteConfig.getContact();
 			settings.gntp = {};
 			if (settings.getGntpEnabled() && getHasGntp()) {
-				settings.gntp = getBeanFactory().getBean('notify', {
+				settings.gntp = new mura500.model.beans.notify(
 					GntpHost: settings.getGntpHost(),
 					GntpPort: settings.getGntpPort(),
 					GntpPassword: settings.getGntpPassword(),
 					GntpIcon: settings.getGntpIcon()
-				});
+				);
 			}
 			settings.mailerCache = {};
 			var page404 = getBean('content').loadBy(filename='404', siteid=SiteId);
