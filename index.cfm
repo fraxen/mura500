@@ -17,9 +17,10 @@
 		);
 	}
 
-	settingsService = VARIABLES.beanFactory.getBean('SettingsService');
+	getSettingsService = function() { return VARIABLES.beanFactory.getBean('SettingsService');};
 
-	siteSettings = settingsService.getSiteSettings();
+	siteSettings = getSettingsService().getSiteSettings();
+
 	relErrorCache = '/#Replace(Replace(getSettingsService().getTemplateCache(), ExpandPath('/'), ''), '\', '/', 'ALL')#';
 
 	// }}}

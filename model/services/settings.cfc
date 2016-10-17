@@ -2,6 +2,7 @@
 component persistent="false" accessors="true" output="false" extends='mura.cfobject' {
 	property name='sites' type='array';
 	property name='beanFactory';
+	property name='errorManagerService';
 	property name='siteSettings' type='struct';
 	property name='settingsDefault' type='struct';
 	property name='default404' type='struct';
@@ -81,7 +82,7 @@ component persistent="false" accessors="true" output="false" extends='mura.cfobj
 					GntpIcon: settings.getGntpIcon()
 				});
 			}
-			}
+			settings.mailerCache = {};
 			var page404 = getBean('content').loadBy(filename='404', siteid=SiteId);
 			if (page404.getIsNew()) {
 				page404.set(VARIABLES.default404).save();

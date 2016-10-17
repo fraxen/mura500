@@ -1,7 +1,8 @@
 <cfscript>
 component persistent="false" accessors="true" output="false" extends="mura.plugin.pluginGenericEventHandler" {
-	property name='settingsService';
+	property name='SettingsService';
 	property name='ErrorManagerService';
+	property name='beanFactory';
 
 	include 'config.cfm';
 
@@ -14,8 +15,10 @@ component persistent="false" accessors="true" output="false" extends="mura.plugi
 
 	public void function onApplicationLoad(required struct $) {
 		// register this file as a Mura eventHandler
+		setBeanFactory(VARIABLES.beanFactory);
 		VARIABLES.pluginConfig.addEventHandler(this);
 		setSettingsService(getBeanFactory().getBean('SettingsService', {sites: VARIABLES.sites}));
+		setErrorManagerService(getBeanFactory().getBean('ErrorManagerService'));
 	}
 	
 }
