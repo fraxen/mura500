@@ -20,6 +20,7 @@
 	settingsService = VARIABLES.beanFactory.getBean('SettingsService');
 
 	siteSettings = settingsService.getSiteSettings();
+	relErrorCache = '/#Replace(Replace(getSettingsService().getTemplateCache(), ExpandPath('/'), ''), '\', '/', 'ALL')#';
 
 	// }}}
 
@@ -55,10 +56,13 @@
 	<style type="text/css">
 		#configedit legend {FONT-WEIGHT: Bold; WIDTH: auto; BORDER: 0; PADDING: 0.2em; MARGIN: 0;}
 		#configedit fieldset {PADDING: 1em;}
-		#configedit dl {CLEAR: Both; PADDING: 2%; WIDTH: 100%;}
+		#configedit dl {CLEAR: Both; PADDING: 0.2em 2% 0.2em 2%; WIDTH: 98%; MARGIN: 0; DISPLAY: inline-block;}
 		#configedit dd {FLOAT: Left; WIDTH: 30%;}
 		#configedit dt {FLOAT: Left; WIDTH: 64%;}
 		#configedit input[type=text], #configedit textarea {WIDTH: 100%;}
+		.filebox {WIDTH: 80%; BACKGROUND: #eee; box-shadow: 2px 2px 2px #888; MARGIN: auto auto 2em auto; PADDING: 0; DISPLAY: Block;}
+		.filebox input {CURSOR: auto; PADDING: 0;}
+		.filebox h3 {PADDING: 2%;}
 	</style>
 </cfsavecontent>
 <cfhtmlhead text="#head#" />
@@ -81,6 +85,17 @@
 				<legend>#SiteId#</legend>
 				<p><strong>#siteSettings[SiteId].domain#</strong><br />#ArrayToList(siteSettings[SiteId].domainalias, ',')#</p>
 				<p><em>Last generated: #DateFormat(siteSettings[SiteId].getLastUpdate(), 'yyyy-mm-dd')# #TimeFormat(siteSettings[SiteId].getLastUpdate(), 'HH:mm')#</em></p>
+				<div class="filebox">
+					<h3>To copy and paste into your web server, servlet engine and/or cfml engine configuration:</h3>
+					<dl><dd>Static 404</dd><dt>
+						<input type="text" readonly="readonly" value="#relErrorCache##SiteId#_404.html" />
+						</dt>
+					</dl>
+					<dl><dd>Static 500</dd><dt>
+						<input type="text" readonly="readonly" value="#relErrorCache##SiteId#_500.html" />
+						</dt>
+					</dl>
+				</div>
 				<dl>
 					<dd><label for="#SiteId#_frequency">Update frequency (days)<br />(creating static error pages)<br/><em>Set to 0 to only do manual</em></label></dd>
 					<dt><input type="text" name="#SiteId#_frequency" id="#SiteId#_frequency" value="#siteSettings[SiteId].getFrequency()#" placeholder="Update frequency (days)" /></dt>
