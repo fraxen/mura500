@@ -165,17 +165,22 @@
 	jsLibLoaded: true
 )#
 <script type="text/javascript">
-		$('###SiteID#_emailenabled').change(function() {
-			$('###SiteID#_email').prop('disabled', !$(this).is(':checked'));
-			$('###SiteID#_emailbody').prop('disabled', !$(this).is(':checked'));
-			$('###SiteID#_emailfrequency').prop('disabled', !$(this).is(':checked'));
-		});
-		$('###SiteID#_gntpenabled').change(function() {
-			$('###SiteID#_gntphost').prop('disabled', !$(this).is(':checked'));
-			$('###SiteID#_gntpport').prop('disabled', !$(this).is(':checked'));
-			$('###SiteID#_gntppassword').prop('disabled', !$(this).is(':checked'));
-			$('###SiteID#_gntpicon').prop('disabled', !$(this).is(':checked'));
 	<cfloop index="SiteId" array="#StructKeyArray(siteSettings)#">
+		$(document).ready(function(){
+			$('###SiteID#_emailenabled').change(function() {
+				$('###SiteID#_email').prop('disabled', !$(this).is(':checked'));
+				$('###SiteID#_emailbody').prop('disabled', !$(this).is(':checked'));
+				$('###SiteID#_emailfrequency').prop('disabled', !$(this).is(':checked'));
+			});
+			$('###SiteID#_gntpenabled').change(function() {
+				$('###SiteID#_gntphost').prop('disabled', !$(this).is(':checked'));
+				$('###SiteID#_gntpport').prop('disabled', !$(this).is(':checked'));
+				$('###SiteID#_gntppassword').prop('disabled', !$(this).is(':checked'));
+				$('###SiteID#_gntpicon').prop('disabled', !$(this).is(':checked'));
+			});
+			$('.filebox input').click(function() {
+				$(this).select();
+			});
 		});
 	</cfloop>
 </script>
