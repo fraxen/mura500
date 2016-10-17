@@ -89,8 +89,6 @@ component persistent="false" accessors="true" output="false" extends='mura.cfobj
 			}
 			settings.Url404 = siteConfig.getContentRenderer().$.CreateHref(filename=page404.getFilename(), siteid=SiteId, complete=true);
 			settings.Url500 = siteConfig.getContentRenderer().$.CreateHref(filename=page500.getFilename(), siteid=SiteId, complete=true);
-			ss.Insert(SiteId, settings);
-		});
 			if (!FileExists('#getTemplateCache()##settings.getSiteID()#_404.html')) {
 				getErrorManagerService().downloadTemplates(settings, ['404']);
 			}
