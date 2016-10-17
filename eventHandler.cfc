@@ -9,6 +9,9 @@ component persistent="false" accessors="true" output="false" extends="mura.plugi
 	public void function onSiteMonitor(required struct $) {
 		getErrorManagerService().onSiteMonitor($.event('siteid'));
 	}
+	public void function onGlobalError(required struct $) {
+		getErrorManagerService().onGlobalError($);
+	}
 
 	public void function onApplicationLoad(required struct $) {
 		// register this file as a Mura eventHandler

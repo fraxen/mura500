@@ -54,7 +54,51 @@ component persistent="false" accessors="true" output="false" extends='mura.cfobj
 		return THIS;
 	}
 
-	private void function downloadTemplates(Site) {
+	public any function onGlobalError(required $) {
+		try{
+		param name='URL.Debug' default=false;
+		var site = '';
+		var ex = ARGUMENTS.$.event('exception');
+		// content reset = true;
+		// header statusCode='500' statusText='Internal Server Error';
+		if (!URL.Debug) {
+			if (StructKeyExists(getSettingsService().getSiteSettings(), ARGUMENTS.$.event('SiteId'))) {
+				site = getSettingsService().getSiteSettings()[ARGUMENTS.$.event('SiteId')];
+				toast(site, 'ERROR - MESSAGE: #ex.Message#  DETAIL: #ex.Detail#');
+				include '/#Replace('#getSettingsService().getTemplateCache()##Site.getSiteID()#_500.html', ExpandPath('/'), '')#';
+				if (Site.getEmailEnabled()) {
+					lock name='mura500' type='exclusive' timeout=60 {
+						if (
+							site.getEmailFrequency()
+							AND
+							StructKeyExists(site.mailerCache, ex.Message)
+							AND
+							DateDiff('h', site.mailerCache[ex.Message].Last, Now()) < site.getEmailFrequency()
+							)
+						{
+							site.mailerCache[ex.Message].Count = site.mailerCache[ex.Message].Count + 1;
+							abort;
+						}
+						var sinceLast = StructKeyExists(site.mailerCache, ex.Message) ? '<p>#site.mailerCache[ex.Message].Count# since last report (#site.mailerCache[ex.Message].Last#)</p>' : '';
+						sendmail(site, 'Error #ex.Message#', Evaluate(DE(site.getEmailBody())));
+						if (site.getEmailFrequency()) {
+							site.mailerCache[ex.Message].Count = 0;
+							site.mailerCache[ex.Message].Last = Now();
+						}
+					}
+				}
+				abort;
+			}
+			writeOutput(getBasic500());
+			abort;
+		}
+		}
+		catch (any e) {
+			// It wouldn't be good if the error handler errors out, right? 
+		}
+	}
+
+	public void function downloadTemplates(required any Site, array PagesToDo=['404', '500']) {
 		var request = '';
 		var pages = {
 			'404': {url: ARGUMENTS.Site.Url404, file: '#getSettingsService().getTemplateCache()##ARGUMENTS.Site.getSiteID()#_404.html', basic: getBasic404()},
