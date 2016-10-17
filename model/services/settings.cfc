@@ -29,8 +29,13 @@ component persistent="false" accessors="true" output="false" extends='mura.cfobj
 
 	public any function setup() {
 		var ss = {};
-		var adminEmail = ValueArray(queryExecute("SELECT * FROM tusers WHERE s2 = 1").Email);
-		getSites().each(function(SiteId) {
+		var adminEmail = [];
+		getErrorManagerService().setup();
+		var thisEmail = [];
+		for (var a in new Query(sql="SELECT * FROM tusers WHERE s2 = 1").execute().getResult()) {
+			ArrayAppend(adminEmail, a.Email);
+		}
+		for (var SiteID in getSiteS()) {
 			var settings = new mura.extend.extendObject().loadBy(
 				type: 'Custom',
 				subtype: 'Mura500',
