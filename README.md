@@ -1,6 +1,8 @@
 # Mura500 - Mura CMS plugin for handling _500 Internal Server Error_ pages
 A plugin for [Mura CMS 6.2](http://www.getmura.com/) - a CFML (Adobe ColdFusion/Lucee) content management system.
 
+<p align="center"><strong><a href="https://github.com/fraxen/mura500/releases">Download latest release</a></strong></p>
+
 This is a simple plugin to (periodically) generate static pages for 404 (Not found) and 500 (Internal server error) messages. Mura has good handling of 404 errors for requests to pages that go through the CMS, but that might not include e.g. css/js resources. For a 500 page, the plugin tries to download the page _/500_ on the site in question. If those pages do not exist, they will be created with sensible defaults, that you can further customize.
 
 There are multiple places where you can add these as settings: in the webserver (Apache/Nginx/IIS etc), in the servlet engine (Jetty/Tomcat etc) and in the coldfusion/cfml engine (Lucee/ACF). Instructions on how to specify that is outside the scope of this plugin, please refer to the documentation for the piece of software in question.
@@ -16,7 +18,7 @@ This projects is released as is. It has not been extensively tested, so you migh
 A Mura CMS 6.2 install, so far tested on Lucee 4.5 and Adobe Coldfusion 10 with MySql, but should work with other cfml engines, and should probably work on Mura 7 too - but have not tested this yet.
 
 ## Instructions
-* Download the latest release, or clone the repository
+* [Download the latest release](https://github.com/fraxen/mura500/releases), or clone the repository
 * Install as a Mura CMS plugin
 * Go to the _modules/plugin_ page in the administrator and review the settings
 * You might want to test that the plugin can download the templates properly, so that it doesn't repeatedly try every onSiteMonitor cycle.
