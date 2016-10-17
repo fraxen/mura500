@@ -55,19 +55,17 @@ component persistent="false" accessors="true" output="false" extends='mura.cfobj
 				settings.set({
 					SiteId: SiteId,
 					id: SiteId,
-					isnew: 0,
-					Frequency: getsettingsDefault().Frequency,
-					EmailEnabled: getsettingsDefault().EmailEnabled,
-					EmailFrequency: getsettingsDefault().EmailFrequency,
-					EmailBody: getsettingsDefault().EmailBody,
-					GntpEnabled: getsettingsDefault().GntpEnabled,
-					GntpHost: getsettingsDefault().GntpHost,
-					GntpPort: getsettingsDefault().GntpPort,
-					GntpPassword: getsettingsDefault().GntpPassword,
-					GntpIcon: getsettingsDefault().GntpIcon,
-					LastUpdate: getsettingsDefault().LastUpdate,
+					Frequency: getSettingsDefault().Frequency,
+					EmailEnabled: getSettingsDefault().EmailEnabled,
 					Email: ArrayToList(thisEmail),
+					EmailFrequency: getSettingsDefault().EmailFrequency,
+					EmailBody: getSettingsDefault().EmailBody,
 					GntpEnabled: getSettingsDefault().GntpEnabled && getHasGntp(),
+					GntpHost: getSettingsDefault().GntpHost,
+					GntpPort: getSettingsDefault().GntpPort,
+					GntpPassword: getSettingsDefault().GntpPassword,
+					GntpIcon: getSettingsDefault().GntpIcon,
+					LastUpdate: getSettingsDefault().LastUpdate
 				});
 				settings.save();
 			}
