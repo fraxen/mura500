@@ -120,8 +120,8 @@ component persistent="false" accessors="true" output="false" extends='mura.cfobj
 						fileWrite(pages[code].file, pageRequest.filecontent);
 						ARGUMENTS.Site.setLastUpdate(Now());
 						ARGUMENTS.Site.Save();
-						ARGUMENTS.Site.mailer('Downloaded #code# page', '<p><em>#pages[code].url#</em></p>');
-						ARGUMENTS.Site.notify('Downloaded #code# page#Chr(10)##pages[code].url#');
+						sendmail(ARGUMENTS.Site, 'Downloaded #code# page', '<p><em>#pages[code].url#</em></p>');
+						toast(ARGUMENTS.Site, 'Downloaded #code# page#Chr(10)##pages[code].url#');
 					} else {
 						throw('Error in template retrieval');
 					}
@@ -130,8 +130,8 @@ component persistent="false" accessors="true" output="false" extends='mura.cfobj
 					if (!fileExists(pages[code].file)) {
 						fileWrite(pages[code].file, pages[code].basic);
 					}
-					ARGUMENTS.Site.mailer('Error downloading #code# page', '#dumpString(e)#');
-					ARGUMENTS.Site.notify('Error downloading #code# page#Chr(10)##pages[code].url#');
+					sendmail(ARGUMENTS.Site, 'Error downloading #code# page', '#dumpString(e)#');
+					toast(ARGUMENTS.Site, 'Error downloading #code# page#Chr(10)##pages[code].url#');
 				}
 			}
 		}

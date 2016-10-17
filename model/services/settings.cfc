@@ -78,20 +78,6 @@ component persistent="false" accessors="true" output="false" extends='mura.cfobj
 					GntpIcon: settings.getGntpIcon()
 				});
 			}
-			settings.notify = function(message, siteId=settings.getSiteID(), gntp=settings.gntp) {
-				if (isObject(ARGUMENTS.gntp)) {
-					ARGUMENTS.gntp.notify(ARGUMENTS.siteid, ARGUMENTS.message);
-				}
-			}
-			settings.mailer = function(subject, body, SiteId=settings.getSiteID(), sendto=settings.getEmail(), emailenabled=settings.getEmailEnabled()) {
-				if (ARGUMENTS.EmailEnabled) {
-					getBean('mailer').sendHTML(
-						siteid = ARGUMENTS.SiteId,
-						sendto = ARGUMENTS.sendto,
-						subject = '[#ARGUMENTS.SiteId#] #ARGUMENTS.Subject#',
-						html = '<h1>#ARGUMENTS.Subject#</h1>#ARGUMENTS.Body#'
-					);
-				}
 			}
 			var page404 = getBean('content').loadBy(filename='404', siteid=SiteId);
 			if (page404.getIsNew()) {
