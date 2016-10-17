@@ -126,26 +126,30 @@
 						<textarea name="#SiteId#_emailbody" id="#SiteId#_emailbody" placeholder="Email body" <cfif !siteSettings[SiteId].getEmailEnabled()>disabled="disabled"</cfif>>#siteSettings[SiteId].getEmailBody()#</textarea>
 					</dt>
 				</dl>
-				<dl>
-					<dd><label for="#SiteID#_gntpenabled">GNTP (growl) notifications</label</dd>
-					<dt><input type="checkbox" name="#SiteId#_gntpenabled" id="#SiteId#_gntpenabled" value="1" <cfif siteSettings[SiteId].getGntpEnabled()>checked="checked"</cfif>/></dt>
-				</dl>
-				<dl>
-					<dd><label for="#SiteID#_gntphost">GNTP host</label</dd>
-					<dt><input type="text" name="#SiteId#_gntphost" id="#SiteId#_gntphost" value="#siteSettings[SiteId].getGntpHost()#" placeholder="hostname for GNTP" <cfif !siteSettings[SiteId].getGntpEnabled()>disabled="disabled"</cfif>/></dt>
-				</dl>
-				<dl>
-					<dd><label for="#SiteID#_gntpport">GNTP port</label</dd>
-					<dt><input type="text" name="#SiteId#_gntpport" id="#SiteId#_gntpport" value="#siteSettings[SiteId].getGntpPort()#" placeholder="network port for GNTP" <cfif !siteSettings[SiteId].getGntpEnabled()>disabled="disabled"</cfif>/></dt>
-				</dl>
-				<dl>
-					<dd><label for="#SiteID#_gntppassword">GNTP password</label</dd>
-					<dt><input type="text" name="#SiteId#_gntppassword" id="#SiteId#_gntppassword" value="#siteSettings[SiteId].getGntpPassword()#" placeholder="password for GNTP" <cfif !siteSettings[SiteId].getGntpEnabled()>disabled="disabled"</cfif>/></dt>
-				</dl>
-				<dl>
-					<dd><label for="#SiteID#_gntpicon">Icon for notifications<br /><em>A valid full URL</em></label</dd>
-					<dt><input type="text" name="#SiteId#_gntpicon" id="#SiteId#_gntpicon" value="#siteSettings[SiteId].getGntpIcon()#" placeholder="Icon url for GNTP" <cfif !siteSettings[SiteId].getGntpEnabled()>disabled="disabled"</cfif>/></dt>
-				</dl>
+				<cfif getSettingsService().getHasGntp()>
+					<dl>
+						<dd><label for="#SiteID#_gntpenabled">GNTP (growl) notifications</label</dd>
+						<dt><input type="checkbox" name="#SiteId#_gntpenabled" id="#SiteId#_gntpenabled" value="1" <cfif siteSettings[SiteId].getGntpEnabled()>checked="checked"</cfif>/></dt>
+					</dl>
+					<dl>
+						<dd><label for="#SiteID#_gntphost">GNTP host</label</dd>
+						<dt><input type="text" name="#SiteId#_gntphost" id="#SiteId#_gntphost" value="#siteSettings[SiteId].getGntpHost()#" placeholder="hostname for GNTP" <cfif !siteSettings[SiteId].getGntpEnabled()>disabled="disabled"</cfif>/></dt>
+					</dl>
+					<dl>
+						<dd><label for="#SiteID#_gntpport">GNTP port</label</dd>
+						<dt><input type="text" name="#SiteId#_gntpport" id="#SiteId#_gntpport" value="#siteSettings[SiteId].getGntpPort()#" placeholder="network port for GNTP" <cfif !siteSettings[SiteId].getGntpEnabled()>disabled="disabled"</cfif>/></dt>
+					</dl>
+					<dl>
+						<dd><label for="#SiteID#_gntppassword">GNTP password</label</dd>
+						<dt><input type="text" name="#SiteId#_gntppassword" id="#SiteId#_gntppassword" value="#siteSettings[SiteId].getGntpPassword()#" placeholder="password for GNTP" <cfif !siteSettings[SiteId].getGntpEnabled()>disabled="disabled"</cfif>/></dt>
+					</dl>
+					<dl>
+						<dd><label for="#SiteID#_gntpicon">Icon for notifications<br /><em>A valid full URL</em></label</dd>
+						<dt><input type="text" name="#SiteId#_gntpicon" id="#SiteId#_gntpicon" value="#siteSettings[SiteId].getGntpIcon()#" placeholder="Icon url for GNTP" <cfif !siteSettings[SiteId].getGntpEnabled()>disabled="disabled"</cfif>/></dt>
+					</dl>
+				<cfelse>
+					<input type="hidden" name="#SiteId#_gntpenabled" value="0" />
+				</cfif>
 			</fieldset>
 		</cfloop>
 		<br /><input type="submit" class="btn btn-default" value="Update configuration" style="WIDTH: 100%;" />
