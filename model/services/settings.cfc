@@ -44,17 +44,19 @@ component persistent="false" accessors="true" output="false" extends='mura.cfobj
 			);
 			var siteConfig = APPLICATION.serviceFactory.getBean('muraScope').init(siteId).siteConfig();
 			if (!isDate(settings.getLastUpdate())) {
+				thisEmail = Duplicate(adminEmail);
+				if (siteConfig.getContactEmail() != '') {
+					ArrayAppend(thisEmail, siteConfig.getContactEmail());
+				}
+				if (getSettingsDefault().Email != '') {
+					ArrayAppend(thisEmail, getSettingsDefault().Email);
+				}
 				settings.set({
 					SiteId: SiteId,
 					id: SiteId,
 					isnew: 0,
 					Frequency: getsettingsDefault().Frequency,
 					EmailEnabled: getsettingsDefault().EmailEnabled,
-					Email: ArrayToList(
-						Duplicate(adminEmail)
-							.Append(siteConfig.getContactEmail())
-							.Append(getsettingsDefault().Email)
-					),
 					EmailFrequency: getsettingsDefault().EmailFrequency,
 					EmailBody: getsettingsDefault().EmailBody,
 					GntpEnabled: getsettingsDefault().GntpEnabled,
@@ -63,6 +65,7 @@ component persistent="false" accessors="true" output="false" extends='mura.cfobj
 					GntpPassword: getsettingsDefault().GntpPassword,
 					GntpIcon: getsettingsDefault().GntpIcon,
 					LastUpdate: getsettingsDefault().LastUpdate,
+					Email: ArrayToList(thisEmail),
 				});
 				settings.save();
 			}
