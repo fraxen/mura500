@@ -49,17 +49,6 @@
 	for (site in APPLICATION.serviceFactory.getBean('muraScope').init('default').getPlugin('mura500').getAssignedSites()) {
 		ArrayAppend(VARIABLES.sites, site.SiteID);
 	}
-	VARIABLES.beanFactory = new includes.ioc(
-			'/#variables.package#/model',
-			{
-				strict: true,
-				initMethod: 'setup',
-				constants: {
-					sites: ValueArray(application.serviceFactory.getBean('muraScope').init('default').getPlugin('Mura500').getAssignedSites().SiteID),
-					settingsDefault: VARIABLES.settingsDefault,
-					default404: VARIABLES.default404,
-					default500: VARIABLES.default500,
-					templateCache: VARIABLES.templateCache
 	VARIABLES.hasGNTP = false;
 	try {
 		createObject('java', 'net.sf.libgrowl.GrowlConnector');
@@ -67,7 +56,22 @@
 	}
 	catch(any e) {
 	}
+
+	lock name='mura500' type='exclusive' timeout=200 {
+		VARIABLES.beanFactory = new includes.ioc(
+				'/#variables.package#/model',
+				{
+					strict: true,
+					initMethod: 'setup',
+					constants: {
+						sites: VARIABLES.sites,
+						settingsDefault: VARIABLES.settingsDefault,
+						default404: VARIABLES.default404,
+						default500: VARIABLES.default500,
+						templateCache: VARIABLES.templateCache,
+						hasGNTP: VARIABLES.hasGNTP
+					}
 				}
-			}
-		);
+			);
+	}
 </cfscript>

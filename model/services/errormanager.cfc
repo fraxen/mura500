@@ -61,8 +61,8 @@ component persistent="false" accessors="true" output="false" extends='mura.cfobj
 			'404': {url: ARGUMENTS.Site.Url404, file: '#getSettingsService().getTemplateCache()##ARGUMENTS.Site.getSiteID()#_404.html', basic: getBasic404()},
 			'500': {url: ARGUMENTS.Site.Url500, file: '#getSettingsService().getTemplateCache()##ARGUMENTS.Site.getSiteID()#_500.html', basic: getBasic500()}
 		};
-		lock scope='application' type='exclusive' timeout=200 {
-			for (var code in pages) {
+		lock name='mura500' type='exclusive' timeout=200 {
+			for (var code in ARGUMENTS.PagesToDo) {
 				try {
 					pageRequest = new http()
 						.setCharset('utf-8')
@@ -92,17 +92,17 @@ component persistent="false" accessors="true" output="false" extends='mura.cfobj
 
 	private void function exportSiteInfo() {
 		var SiteInfo = {};
-		lock scope='application' type='exclusive' timeout=200 {
+		lock name='mura500' type='exclusive' timeout=200 {
 			for (var SiteID in getSettingsService().getSiteSettings()) {
 				SiteInfo[SiteId] = {
 					file404 = '#SiteId#_404.html',
 					file500 = '#SiteId#_500.html',
 					domains = Duplicate(getSettingsService().getSiteSettings()[SiteId].domainAlias).Append(getSettingsService().getSiteSettings()[SiteId].domain)
-				}
+				};
 			}
-			fileWrite('#getSettingsService().getTemplateCache()#/siteinfo.json', SerializeJSON(SiteInfo));
-			fileWrite('#getSettingsService().getTemplateCache()#/basic404.html', getBasic404());
-			fileWrite('#getSettingsService().getTemplateCache()#/basic500.html', getBasic500());
+			fileWrite('#getSettingsService().getTemplateCache()#siteinfo.json', SerializeJSON(SiteInfo));
+			fileWrite('#getSettingsService().getTemplateCache()#basic404.html', getBasic404());
+			fileWrite('#getSettingsService().getTemplateCache()#basic500.html', getBasic500());
 		}
 	}
 
