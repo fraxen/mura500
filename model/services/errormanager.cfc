@@ -1,9 +1,15 @@
-<cfscript>
-component persistent="false" accessors="true" output="false" extends='mura.cfobject' {
-	property name='beanFactory';
-	property name='settingsService';
-	property name='basic404';
-	property name='basic500';
+<cfcomponent output="false" accessors="true" extends="mura.cfobject">
+	<cfproperty name="beanFactory" />
+	<cfproperty name="settingsService" />
+	<cfproperty name="basic404" />
+	<cfproperty name="basic500" />
+
+	<cffunction name="add500headers" output="false" returnType="void" access="private">
+		<cfcontent reset="true" />
+		<cfheader statuscode="500" statustext="Internal Server Error" />
+	</cffunction>
+
+	<cfscript>
 
 	private string function dumpString(d) {
 		var out = '';
@@ -59,8 +65,7 @@ component persistent="false" accessors="true" output="false" extends='mura.cfobj
 		param name='URL.Debug' default=false;
 		var site = '';
 		var ex = ARGUMENTS.$.event('exception');
-		// content reset = true;
-		// header statusCode='500' statusText='Internal Server Error';
+		add500headers();
 		if (!URL.Debug) {
 			if (StructKeyExists(getSettingsService().getSiteSettings(), ARGUMENTS.$.event('SiteId'))) {
 				site = getSettingsService().getSiteSettings()[ARGUMENTS.$.event('SiteId')];
@@ -152,6 +157,5 @@ component persistent="false" accessors="true" output="false" extends='mura.cfobj
 			fileWrite('#getSettingsService().getTemplateCache()#basic500.html', getBasic500());
 		}
 	}
-
-}
 </cfscript>
+</cfcomponent>
