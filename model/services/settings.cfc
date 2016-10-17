@@ -60,7 +60,7 @@ component persistent="false" accessors="true" output="false" extends='mura.cfobj
 					Email: ArrayToList(thisEmail),
 					EmailFrequency: getSettingsDefault().EmailFrequency,
 					EmailBody: getSettingsDefault().EmailBody,
-					GntpEnabled: getSettingsDefault().GntpEnabled && getHasGntp(),
+					GntpEnabled: getSettingsDefault().GntpEnabled && getHasGntp() ? 1 : 0,
 					GntpHost: getSettingsDefault().GntpHost,
 					GntpPort: getSettingsDefault().GntpPort,
 					GntpPassword: getSettingsDefault().GntpPassword,
