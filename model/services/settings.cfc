@@ -7,6 +7,7 @@ component persistent="false" accessors="true" output="false" extends='mura.cfobj
 	property name='default404' type='struct';
 	property name='default500' type='struct';
 	property name='templateCache' type='string';
+	property name='hasGNTP' type='boolean';
 
 	private array function arrayUnique(inArray) {
 		return StructKeyArray(
@@ -16,12 +17,13 @@ component persistent="false" accessors="true" output="false" extends='mura.cfobj
 		);
 	}
 
-	public any function init(required sites, required settingsDefault, required default404, required default500, required templateCache) {
+	public any function init(required sites, required settingsDefault, required default404, required default500, required templateCache, required hasGNTP) {
 		setSites(ARGUMENTS.sites);
 		setSettingsDefault(ARGUMENTS.settingsDefault);
 		setDefault404(ARGUMENTS.default404);
 		setDefault500(ARGUMENTS.default500);
 		setTemplateCache(ARGUMENTS.templateCache);
+		setHasGntp(ARGUMENTS.hasGNTP);
 		return THIS;
 	}
 
@@ -63,7 +65,7 @@ component persistent="false" accessors="true" output="false" extends='mura.cfobj
 			settings.domainAlias = ListToArray(siteConfig.getDomainAlias(), '#Chr(13)##Chr(10)#');
 			settings.fromAddress = siteConfig.getContact();
 			settings.gntp = {};
-			if (settings.getGntpEnabled()) {
+			if (settings.getGntpEnabled() && getHasGntp()) {
 				settings.gntp = getBeanFactory().getBean('notify', {
 					GntpHost: settings.getGntpHost(),
 					GntpPort: settings.getGntpPort(),

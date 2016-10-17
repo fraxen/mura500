@@ -60,6 +60,13 @@
 					default404: VARIABLES.default404,
 					default500: VARIABLES.default500,
 					templateCache: VARIABLES.templateCache
+	VARIABLES.hasGNTP = false;
+	try {
+		createObject('java', 'net.sf.libgrowl.GrowlConnector');
+		VARIABLES.hasGNTP = true;
+	}
+	catch(any e) {
+	}
 				}
 			}
 		);
