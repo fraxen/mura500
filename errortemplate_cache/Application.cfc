@@ -12,7 +12,7 @@
 				if (fileExists('siteinfo.json')) {
 					APPLICATION.SiteInfo = DeserializeJSON(fileRead('siteinfo.json'));
 				}
-				for (SiteID in APPLICATION.SiteInfo) {
+				for (var SiteID in APPLICATION.SiteInfo) {
 					if(!fileExists(APPLICATION.SiteInfo[SiteID].File404)) {
 						APPLICATION.SiteInfo[SiteID].File404 = 'basic404.html';
 					}
@@ -30,7 +30,7 @@
 			}
 			REQUEST.site = {file404: 'basic404.html', File500: 'basic500.html'};
 			if (Len(StructKeyArray(APPLICATION.SiteInfo))) {
-				for (SiteID in APPLICATION.SiteInfo) {
+				for (var SiteID in APPLICATION.SiteInfo) {
 					if (ArrayFindNoCase(APPLICATION.SiteInfo[SiteId].Domains, REQUEST.Host)) {
 						REQUEST.site = APPLICATION.SiteInfo[SiteId];
 						break;
