@@ -27,7 +27,10 @@ A Mura CMS 6.2 install, so far tested on Lucee 4.5 and Adobe Coldfusion 10 with 
 [Apache license](LICENSE)
 
 ## Future
-[Review and test with Mura 7](https://github.com/fraxen/mura500/issues/2)
+Any help with expanding the plugin is very welcome!
+* [Review and test with Mura 7](https://github.com/fraxen/mura500/issues/2)
+* [Pushbullet notifications, on error](https://github.com/fraxen/mura500/issues/3)
+* [RSS feed for errors](https://github.com/fraxen/mura500/issues/4)
 
 ## Contributions
 Any help, bug fixes, comments or input is very welcome. 
