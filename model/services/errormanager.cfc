@@ -65,6 +65,9 @@
 	}
 
 	public any function onGlobalError(required $) {
+		if (!StructKeyExists(getSettingsService().getSiteSettings(), ARGUMENTS.$.event('SiteId'))) {
+			return;
+		}
 		try{
 		param name='URL.Debug' default=false;
 		var site = '';
