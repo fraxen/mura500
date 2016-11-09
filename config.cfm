@@ -1,6 +1,6 @@
 <cfscript>
 	VARIABLES.package = 'mura500';
-	VARIABLES.packageVersion = '1.0';
+	VARIABLES.packageVersion = '1.0.2';
 	VARIABLES.templateCache = ExpandPath('/#VARIABLES.package#/errortemplate_cache/');
 	VARIABLES.settingsDefault = {
 		Frequency: 7,
