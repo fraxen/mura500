@@ -39,11 +39,11 @@
 		urltitle: '500',
 		approved: 1,
 		parentid: '00000000000000000000000000000000001',
-		summary: 'The link you are requesting have caused an internal server error. This might be an issue with the specific link, or there might be issues witht the server.',
+		summary: 'The link you are requesting have caused an internal server error. This might be an issue with the specific link, or there might be issues with the server.',
 		menutitle: '500',
 		htmltitle: 'Server error (500)',
 		title: 'Server error (500)',
-		body: '<p><i style="float:right; font-size: 10em;" class="fa fa-exclamation-circle" aria-hidden="true"></i>The link you are requesting have caused an internal server error. This might be an issue with the specific link, or there might be issues witht the server.</p><p>Please try again shortly, or try any of the links below:</p><ul><li>Try the navigation on this page to find the information you are looking for.</li><li>If you typed the address, make sure it is spelled correctly.</li><li>Go to the <a href="/">home page</a> of this site for more information.</li><li>If this error continues, do not hesitate to contact the webmaster if you believe there is an error that can be corrected.</li></ul>'
+		body: '<p><i style="float:right; font-size: 10em;" class="fa fa-exclamation-circle" aria-hidden="true"></i>The link you are requesting have caused an internal server error. This might be an issue with the specific link, or there might be issues with the server.</p><p>Please try again shortly, or try any of the links below:</p><ul><li>Try the navigation on this page to find the information you are looking for.</li><li>If you typed the address, make sure it is spelled correctly.</li><li>Go to the <a href="/">home page</a> of this site for more information.</li><li>If this error continues, do not hesitate to contact the webmaster if you believe there is an error that can be corrected.</li></ul>'
 	};
 	VARIABLES.sites = [];
 	for (site in APPLICATION.serviceFactory.getBean('muraScope').init('default').getPlugin('mura500').getAssignedSites()) {
