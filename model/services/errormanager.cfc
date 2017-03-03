@@ -126,9 +126,9 @@
 						.send()
 						.getPrefix();
 					if (
-						(StructKeyExists(pageRequest, 'status_code') && pageRequest.status_code == 200)
+						(StructKeyExists(pageRequest, 'status_code') && (pageRequest.status_code == 200 || pageRequest.status_code == code))
 						||
-						(StructKeyExists(pageRequest.Responseheader, 'status_code') && pageRequest.Responseheader.status_code == 200)
+						(StructKeyExists(pageRequest.Responseheader, 'status_code') && (pageRequest.Responseheader.status_code == 200 || pageRequest.Responseheader.status_code == code))
 					) {
 						fileWrite(pages[code].file, pageRequest.filecontent);
 						ARGUMENTS.Site.setLastUpdate(Now());
