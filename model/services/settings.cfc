@@ -90,8 +90,8 @@ component persistent="false" accessors="true" output="false" extends='mura.cfobj
 			if (page500.getIsNew()) {
 				page500.set(VARIABLES.default500).save();
 			}
-			settings.Url404 = siteConfig.getContentRenderer().$.CreateHref(filename=page404.getFilename(), siteid=SiteId, complete=true);
-			settings.Url500 = siteConfig.getContentRenderer().$.CreateHref(filename=page500.getFilename(), siteid=SiteId, complete=true);
+			settings.Url404 = siteConfig.getContentRenderer().CreateHref(filename=page404.getFilename(), siteid=SiteId, complete=true);
+			settings.Url500 = siteConfig.getContentRenderer().CreateHref(filename=page500.getFilename(), siteid=SiteId, complete=true);
 			if (!FileExists('#getTemplateCache()##settings.getSiteID()#_404.html')) {
 				getErrorManagerService().downloadTemplates(settings, ['404']);
 			}
