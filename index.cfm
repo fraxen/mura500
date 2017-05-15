@@ -123,7 +123,7 @@
 					<dt><input type="text" name="#SiteId#_email" id="#SiteId#_email" value="#siteSettings[SiteId].getEmail()#" placeholder="Email sendlist" <cfif !siteSettings[SiteId].getEmailEnabled()>disabled="disabled"</cfif>/></dt>
 				</dl>
 				<dl>
-					<dd><label for="#SiteId#_emailbody">Email body<br /><em>cfml is ok</em></label></dd>
+					<dd><label for="#SiteId#_emailbody">Email body<br /><em>cfml is ok</em><br/>Use ##dumpString(var)## to dump any variable, e.g. ##dumpString($.event('exception')##</label></dd>
 					<dt>
 						<textarea name="#SiteId#_emailbody" id="#SiteId#_emailbody" placeholder="Email body" <cfif !siteSettings[SiteId].getEmailEnabled()>disabled="disabled"</cfif>>#siteSettings[SiteId].getEmailBody()#</textarea>
 					</dt>
