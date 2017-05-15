@@ -13,7 +13,7 @@
 	private string function dumpString(d) {
 		var out = '';
 		savecontent variable='out' {
-			WriteDump(var=ARGUMENTS.d, expand=true, format='html', showUDFs=false);
+			WriteDump(var=ARGUMENTS.d, expand=true, format='simple', showUDFs=false);
 		}
 		return out;
 	}
