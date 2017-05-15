@@ -74,7 +74,7 @@
 		var ex = ARGUMENTS.$.event('exception');
 		WriteLog(type='ERROR', file='muraGlobalError', text='#ex.Message#');
 		add500headers();
-		if (!URL.Debug) {
+		if ( !URL.Debug && $.currentUser().isSuperUser() == 0 ) {
 			if (StructKeyExists(getSettingsService().getSiteSettings(), ARGUMENTS.$.event('SiteId'))) {
 				site = getSettingsService().getSiteSettings()[ARGUMENTS.$.event('SiteId')];
 				toast(site, 'ERROR - MESSAGE: #ex.Message#  DETAIL: #ex.Detail#');
